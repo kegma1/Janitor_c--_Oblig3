@@ -6,6 +6,7 @@
 #include <sstream>
 #include <map>
 #include <iostream>
+#include <format>
 #include "file_reader.h"
 #include "libs.h"
 
@@ -28,14 +29,15 @@ public:
         std::getline(iss, token, ' ');
         int y = std::stoi(token);
         std::getline(iss, token, ' ');
-        std::string buinding = token;
+        std::string building = token;
 
 
-        if(buildings.find(buinding) == buildings.end()) {
-            buildings.insert({buinding, Building()});
+        if(buildings.find(building) == buildings.end()) {
+            Building new_building = Building();
+            buildings.insert({building, new_building});
         } 
 
-        buildings[buinding].add_room(x, y);
+        buildings[building].add_room(x, y);
         return 0;
     }
 
@@ -49,7 +51,27 @@ public:
 
     virtual void print_raw() const {
         for(const auto& pair : buildings) {
-            std::cout << "building: " << pair.first << ", janitors: " << pair.second.get_number_of_janitors() << std::endl;
+            std::cout << "building: " << pair.first << ", janitors: " << pair.second.number_of_janitors() << std::endl;
+        }
+    }
+
+    virtual void save_all() const {
+        for(const auto& pair : buildings) {
+            std::ofstream outfile(pair.first + ".txt");
+
+            if(!outfile.is_open()) {
+                std::cout << "Could not create file: " << pair.first << std::endl;
+                return;
+            }
+
+            outfile << "Name: " << pair.first << std::endl;
+            outfile << "Total area: " << pair.second.total_area() << std::endl;
+            outfile << "Amount of rooms: " << pair.second.number_of_rooms() << std::endl;
+            outfile << "Needed cleaning staff: " << pair.second.number_of_janitors() << std::endl << std::endl;
+            outfile << "Rooms:" << std::endl;
+            outfile << pair.second.get_all_rooms_as_strings();
+
+            outfile.close();        
         }
     }
 

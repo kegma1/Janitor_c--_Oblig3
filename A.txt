@@ -1,0 +1,9 @@
+Name: A
+Total area: 55
+Amount of rooms: 3
+Needed cleaning staff: 4
+
+Rooms:
+L: 4, W: 4
+L: 5, W: 6
+L: 3, W: 3

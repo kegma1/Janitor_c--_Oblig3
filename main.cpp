@@ -7,7 +7,7 @@
 int main() {
     Parser p = Parser("Input_rom-1.txt");
     p.parse_file();
-    p.print_raw();
+    p.save_all();
     return 0;
 }
 
